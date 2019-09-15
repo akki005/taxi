@@ -1,0 +1,28 @@
+.colored{
+    color: blue
+}
+
+html, body,#root {
+    height: 100%;
+}
+
+.container{
+    min-height: 100%;
+    overflow: hidden;
+}
+
+.ride-container{
+    margin-top: 50px;
+}
+
+.time-selector{
+    width: 15% !important;
+}
+
+.drivers-table{
+    width: 50% !important;
+}
+
+.shift-add-form{
+    margin-top: 10%;
+}
