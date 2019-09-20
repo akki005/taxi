@@ -1,6 +1,7 @@
 
 var http_status = require('http-status-codes');
 let Sequelize = require("sequelize");
+let {RESPONSE_MESSAGES}=require("../constants/messages");
 
 module.exports.handleErrors = function (error) {
     if (error instanceof Sequelize.ForeignKeyConstraintError) {
@@ -10,7 +11,7 @@ module.exports.handleErrors = function (error) {
         }
     }else if(error instanceof Sequelize.UniqueConstraintError){
         return {
-            message: `${error.value} already exist`,
+            message: RESPONSE_MESSAGES.CONFLICTS,
             status: http_status.CONFLICT
         }
     }

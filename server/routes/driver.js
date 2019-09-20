@@ -10,8 +10,10 @@ var http_status = require('http-status-codes');
 
 router.route("/")
     .get(controllers.getAll)
-    .post(controllers.add);
+    .post(controllers.add)
 
+router.route("/:id")
+    .put(controllers.edit);
 
 
 router.route("/:id/shifts")
@@ -19,7 +21,8 @@ router.route("/:id/shifts")
     .get(controllers.getAllShifts);
 
 router.route("/:id/cars")
-    .post(controllers.addCar);
+    .post(controllers.addCar)
+    .get(controllers.getAllCars);
 
 
 module.exports = router;

@@ -24,7 +24,7 @@ Car.init({
     allowNull: false
   },
   active: {
-    type: Sequelize.BOOLEAN,
+    type: Sequelize.TINYINT,
     allowNull: false
   }
 }, {

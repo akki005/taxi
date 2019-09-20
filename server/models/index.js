@@ -30,12 +30,18 @@ let {
     TripPayment
 } = require("../models/trip_payment");
 
-let{DriverBooking}=require("./driver_bookings");
+let { DriverBooking } = require("./driver_bookings");
 
 let { WeekDay } = require("./weekday");
 
 Shift.belongsTo(WeekDay, { foreignKey: 'day' });
-WeekDay.hasMany(Shift,{foreignKey:'day'})
+WeekDay.hasMany(Shift, { foreignKey: 'day' })
+Driver.hasMany(Car, { foreignKey: "driver_id",as:"cars" });
+Car.belongsTo(CarType, { foreignKey: "type_id", as: "car_type" });
+Car.belongsToMany(Amenity,{through: CarToAmenity, foreignKey: "car_id",as: "amenities"});
+Amenity.belongsToMany(Car,{through: CarToAmenity, foreignKey: "amenity_id"});
+
+
 
 module.exports = {
     Driver,

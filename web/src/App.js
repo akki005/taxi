@@ -4,9 +4,10 @@ import React, { Component } from 'react';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 import Ride from './components/Ride';
 // import Driver from './components/Driver';
-import DriversTable from './components/DriversTable';
+import DriversTable from './components/Drivers/DriversTable';
 // import ShiftAdd from './components/ShiftAdd';
-import Shifts from './components/Shifts';
+import Shifts from './components/Drivers/Shifts/Shifts';
+import Cars from './components/Drivers/Cars/Cars';
 
 
 
@@ -29,6 +30,7 @@ class App extends Component {
         <Route exact path="/" component={Ride} />
         <Route exact path="/drivers" component={DriversTable} />
         <Route exact path="/drivers/:id/shifts" component={Shifts} />
+        <Route exact path="/drivers/:id/cars" component={Cars} />
       </Router>
     );
   }

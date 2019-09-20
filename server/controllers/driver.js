@@ -4,6 +4,7 @@ let {
     sequelize
 } = require("../DB/mysql");
 var http_status = require('http-status-codes');
+let { RESPONSE_MESSAGES } = require("../constants/messages");
 let sequelizeErrorHandler = require("../helpers/sequelizeErrorHandler").handleErrors;
 
 module.exports.controllers = {
@@ -11,7 +12,7 @@ module.exports.controllers = {
     getAll: async (req, res, next) => {
         try {
             let all_drivers = await Models.Driver.findAll({
-                attributes: ['id', [sequelize.fn('concat', sequelize.col('first_name'), " ", sequelize.col('last_name')), 'name']]
+                attributes: ['id', [sequelize.fn('concat', sequelize.col('first_name'), " ", sequelize.col('last_name')), 'name'], "first_name", "last_name", "active", "contact"]
             });
             if (all_drivers.length > 0) {
                 return res.status(http_status.OK).send(all_drivers);
@@ -50,6 +51,33 @@ module.exports.controllers = {
             return res.status(http_status.INTERNAL_SERVER_ERROR)
                 .send({
                     error: http_status.getStatusText(http_status.INTERNAL_SERVER_ERROR)
+                });
+        }
+    },
+
+    edit: async (req, res, next) => {
+        try {
+            let results = await Models.Driver.update(req.body, {
+                where: {
+                    id: Number(req.params.id)
+                }
+            })
+            let status = results[0] === 1 ? http_status.CREATED : http_status.CONFLICT;
+            let message = results[0] === 1 ? RESPONSE_MESSAGES.SUCCESS : RESPONSE_MESSAGES.CONFLICTS;
+            return res.status(status).send({
+                message: message
+            });
+        } catch (error) {
+            console.log(error);
+            let sql_error = sequelizeErrorHandler(error)
+            if (sql_error) {
+                return res.status(sql_error.status).send({
+                    message: sql_error.message
+                })
+            }
+            return res.status(http_status.INTERNAL_SERVER_ERROR)
+                .send({
+                    message: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR
                 });
         }
     },
@@ -153,7 +181,7 @@ module.exports.controllers = {
 
                 }
             }
-            await transaction.commit();            
+            await transaction.commit();
             let status = results[1] === false ? http_status.CONFLICT : http_status.CREATED;
             return res.status(status).send();
         } catch (error) {
@@ -168,6 +196,36 @@ module.exports.controllers = {
                 .send({
                     error: http_status.getStatusText(http_status.INTERNAL_SERVER_ERROR)
                 });
+        }
+    },
+    getAllCars: async (req, res) => {
+        try {
+            let results = await Models.Driver.findAll({
+                attributes: [],
+                where: {
+                    id: req.params.id
+                },
+                include: [{
+                    attributes: ["id", "model_name", "active"],
+                    model: Models.Car,
+                    as: "cars",
+                    include: [{
+                        attributes: ["id","type"],
+                        model: Models.CarType,
+                        as: "car_type"
+                    }, {
+                        model: Models.Amenity,
+                        as:"amenities",
+                        attributes: ["id", "type"],
+                        through: {attributes: []}
+                    }]
+                }]
+            });
+            return res.status(http_status.OK).send({
+                cars:results[0].cars 
+            });
+        } catch (error) {
+            return res.status(http_status.INTERNAL_SERVER_ERROR).send(error);
         }
     }
 }

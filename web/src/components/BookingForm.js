@@ -3,6 +3,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Script from 'react-load-script';
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
+import BookingInfo from './BookingInfo';
 
 class BookingForm extends Component {
 
@@ -187,26 +188,7 @@ class BookingForm extends Component {
                 </label>
             </div>)
         let booking_details = this.state.booking_details ?
-            (<table className="table">
-                <caption>Booking Information</caption>
-                <thead>
-                    <tr>
-                        <th scope="col">Driver Name</th>
-                        <th scope="col">Driver Contact</th>
-                        <th scope="col">Car Licence Number</th>
-                        <th scope="col">Fare</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{this.state.booking_details.driver_name}</td>
-                        <td>{this.state.booking_details.driver_contact}</td>
-                        <td>{this.state.booking_details.car_id}</td>
-                        <td>{this.state.booking_details.trip_fare}</td>
-                    </tr>
-                </tbody>
-            </table>
-            ) : "";
+            (<BookingInfo {...this.state.booking_details}/>) : "";
         return (
             <div className="row">
                 <div className="col-md-5">

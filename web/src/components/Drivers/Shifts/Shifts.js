@@ -41,13 +41,14 @@ class Shifts extends React.Component {
         return (
             <div className="row">
                 <div className="col-md-6">
-                    <table className="table drivers-table" style={{margin: "auto",marginTop: "20%"}}>
+                    <table className="table" style={{margin: "auto",marginTop: "20%"}}>
                         <caption>Shifts</caption>
                         <thead>
                             <tr>
                                 <th>Day</th>
                                 <th>Start</th>
                                 <th>End</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
